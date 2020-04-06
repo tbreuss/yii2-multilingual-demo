@@ -2,7 +2,10 @@
 
 namespace app\models;
 
+use Ramsey\Uuid\Uuid;
 use Yii;
+use yii\helpers\Url;
+use yii\web\UploadedFile;
 
 /**
  * This is the model class for table "File".
@@ -10,6 +13,7 @@ use Yii;
  * @property int $id
  * @property string $uuid
  * @property string $mime_type
+ * @property int $size
  * @property string $filename
  * @property string $content
  * @property string|null $created_at
@@ -18,6 +22,11 @@ use Yii;
  */
 class File extends \yii\db\ActiveRecord
 {
+    /**
+     * @var UploadedFile
+     */
+    public $uploadedFile;
+
     /**
      * {@inheritdoc}
      */
@@ -32,12 +41,23 @@ class File extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['uuid', 'mime_type', 'filename', 'content'], 'required'],
-            [['content'], 'string'],
-            [['created_at', 'updated_at', 'deleted_at'], 'safe'],
-            [['uuid'], 'string', 'max' => 36],
-            [['mime_type'], 'string', 'max' => 31],
-            [['filename'], 'string', 'max' => 255],
+            [['uploadedFile'], 'file', 'skipOnEmpty' => false, 'extensions' => 'png, jpg, jpeg, gif, pdf'],
+            // uuid
+            ['uuid', 'required'],
+            ['uuid', 'string', 'max' => 36],
+            // mime_type
+            ['mime_type', 'required'],
+            ['mime_type', 'string', 'max' => 31],
+            // filename
+            ['filename', 'required'],
+            ['filename', 'string', 'max' => 255],
+            // content
+            ['content', 'required'],
+            ['content', 'string'],
+            // ...
+            [['created_at'], 'default', 'value' => date('Y-m-d H:i:s'), 'on'=>'insert'],
+            [['updated_at'], 'default', 'value' => date('Y-m-d H:i:s'), 'on'=>'update'],
+            [['deleted_at'], 'safe'],
         ];
     }
 
@@ -56,5 +76,24 @@ class File extends \yii\db\ActiveRecord
             'updated_at' => 'Updated At',
             'deleted_at' => 'Deleted At',
         ];
+    }
+
+    public static function createFromUploadFile(UploadedFile $uploadedFile)
+    {
+        $model = new self();
+        $model->uploadedFile = $uploadedFile;
+        $model->uuid = Uuid::uuid4()->toString();
+        $model->mime_type = $uploadedFile->type;
+        $model->size = $uploadedFile->size;
+        $model->filename = $uploadedFile->getBaseName();
+        if (is_uploaded_file($uploadedFile->tempName)) {
+            $model->content = base64_encode(file_get_contents($uploadedFile->tempName));
+        }
+        return $model;
+    }
+
+    public function getAbsUrl(string $type)
+    {
+        return Url::base(true) . '/index.php/download/' . $type . '?uuid=' . $this->uuid;
     }
 }

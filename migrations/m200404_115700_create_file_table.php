@@ -17,6 +17,7 @@ class m200404_115700_create_file_table extends Migration {
             'mime_type' => $this->string(31)->notNull(),
             'filename' => $this->string(255)->notNull(),
             'content' => $this->text()->notNull(),
+            'size' => $this->integer()->notNull()->defaultExpression(0),
             'created_at' => $this->dateTime(),
             'updated_at' => $this->dateTime(),
             'deleted_at' => $this->dateTime(),

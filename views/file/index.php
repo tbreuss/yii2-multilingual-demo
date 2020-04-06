@@ -30,12 +30,13 @@ $this->params['breadcrumbs'][] = $this->title;
             'uuid',
             'mime_type',
             'filename',
+            'size',
             //'content:ntext',
             //'created_at',
             //'updated_at',
             //'deleted_at',
 
-            ['class' => 'yii\grid\ActionColumn'],
+            ['class' => 'yii\grid\ActionColumn', 'template' => '{update} {delete}'],
         ],
     ]); ?>
 

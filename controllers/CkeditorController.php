@@ -2,26 +2,49 @@
 
 namespace app\controllers;
 
-use yii\helpers\Url;
+use app\models\File;
+use Yii;
 use yii\rest\Controller;
+use yii\web\UploadedFile;
 
 class CkeditorController extends Controller
 {
     public function actionFile()
     {
-        return [
-            'uploaded' => 1,
-            'fileName' => 'www.pdf',
-            'url' => Url::base(true) . '/index.php/download/file?uuid=61f2e425-6505-4b31-be0e-13794a4bccea',
-        ];
+        return $this->doUpload('file');
     }
 
     public function actionImage()
     {
+        return $this->doUpload('image');
+    }
+
+    private function doUpload(string $type)
+    {
+        if (!Yii::$app->request->isPost) {
+            return [
+                'uploaded' => 0,
+            ];
+        }
+
+        $model = File::createFromUploadFile(
+            UploadedFile::getInstanceByName('upload')
+        );
+
+        if ($model->save()) {
+            // file is uploaded successfully
+            return [
+                'uploaded' => 1,
+                'fileName' => $model->filename,
+                'url' => $model->getAbsUrl($type),
+            ];
+        }
+
         return [
-            'uploaded' => 1,
-            'fileName' => 'xxx.jpg',
-            'url' => Url::base(true) . '/index.php/download/image?uuid=27c78894-04ea-4431-b074-e2a6ec2c4c76',
+            'uploaded' => 0,
+            'error' => [
+               'message' => $model->getFirstError('uploadedFile')
+            ]
         ];
     }
 }
