@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8687c75a47cec48865577b742701c9d6",
+    "content-hash": "1b211a16e24c931c48a4ff4d67a3dbc1",
     "packages": [
         {
             "name": "bower-asset/bootstrap",
@@ -873,16 +873,16 @@
         },
         {
             "name": "yeesoft/yii2-multilingual",
-            "version": "1.0.2",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/yeesoft/yii2-multilingual.git",
-                "reference": "71f3d857a1c3bee3e758243ae17c2f1a6bf08659"
+                "reference": "c2d50e2f626953ea2709d7fc461f034047a772ce"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yeesoft/yii2-multilingual/zipball/71f3d857a1c3bee3e758243ae17c2f1a6bf08659",
-                "reference": "71f3d857a1c3bee3e758243ae17c2f1a6bf08659",
+                "url": "https://api.github.com/repos/yeesoft/yii2-multilingual/zipball/c2d50e2f626953ea2709d7fc461f034047a772ce",
+                "reference": "c2d50e2f626953ea2709d7fc461f034047a772ce",
                 "shasum": ""
             },
             "require": {
@@ -917,7 +917,7 @@
                 "yii2",
                 "yii2-multilingual"
             ],
-            "time": "2017-06-28T11:53:25+00:00"
+            "time": "2020-04-07T09:33:59+00:00"
         },
         {
             "name": "yiisoft/yii2",
@@ -4361,7 +4361,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "yeesoft/yii2-multilingual": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
